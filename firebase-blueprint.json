@@ -1,0 +1,135 @@
+{
+  "entities": {
+    "schools": {
+      "title": "School",
+      "description": "School profile and configuration",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "code": { "type": "string", "description": "School abbreviation e.g. RCA" },
+        "address": { "type": "string" },
+        "state": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "logoUrl": { "type": "string" },
+        "motto": { "type": "string" },
+        "type": { "type": "string", "enum": ["Primary", "Junior Secondary", "Senior Secondary", "Combined"] },
+        "currentSession": { "type": "string" },
+        "currentTerm": { "type": "string", "enum": ["Term 1", "Term 2", "Term 3"] },
+        "subscriptionStatus": { "type": "string", "enum": ["Active", "Expired", "Suspended", "Trial"] },
+        "subscriptionExpiry": { "type": "string", "format": "date-time" },
+        "pricingPerStudent": { "type": "number" },
+        "gradingScale": { "type": "array", "items": { "type": "object" } }
+      },
+      "required": ["name", "code", "email", "subscriptionStatus"]
+    },
+    "users": {
+      "title": "User",
+      "description": "System users (Super Admin, School Admin, Teacher)",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "fullName": { "type": "string" },
+        "role": { "type": "string", "enum": ["super_admin", "school_admin", "teacher"] },
+        "schoolId": { "type": "string", "description": "Reference to schools collection" },
+        "status": { "type": "string", "enum": ["Active", "Inactive"] },
+        "assignedClasses": { "type": "array", "items": { "type": "string" } },
+        "assignedSubjects": { "type": "array", "items": { "type": "object" } }
+      },
+      "required": ["email", "role"]
+    },
+    "students": {
+      "title": "Student",
+      "description": "Student profile",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "fullName": { "type": "string" },
+        "dob": { "type": "string" },
+        "gender": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "currentClassId": { "type": "string" },
+        "department": { "type": "string" },
+        "photoUrl": { "type": "string" },
+        "guardianName": { "type": "string" },
+        "guardianPhone": { "type": "string" },
+        "admissionDate": { "type": "string" },
+        "status": { "type": "string", "enum": ["Active", "Inactive", "Graduated"] }
+      },
+      "required": ["fullName", "schoolId", "currentClassId", "status"]
+    },
+    "classes": {
+      "title": "Class",
+      "description": "School classes",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "arm": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "department": { "type": "string" },
+        "formTeacherId": { "type": "string" },
+        "session": { "type": "string" }
+      },
+      "required": ["name", "schoolId", "session"]
+    },
+    "subjects": {
+      "title": "Subject",
+      "description": "Subjects per class",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "classId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "weights": { "type": "object" }
+      },
+      "required": ["name", "classId", "schoolId"]
+    },
+    "results": {
+      "title": "Result",
+      "description": "Academic results",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "subjectId": { "type": "string" },
+        "classId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "session": { "type": "string" },
+        "term": { "type": "string" },
+        "test1": { "type": "number" },
+        "test2": { "type": "number" },
+        "test3": { "type": "number" },
+        "exam": { "type": "number" },
+        "total": { "type": "number" },
+        "grade": { "type": "string" },
+        "remark": { "type": "string" }
+      },
+      "required": ["studentId", "subjectId", "schoolId", "session", "term"]
+    },
+    "subscriptions": {
+      "title": "Subscription",
+      "description": "School subscription records",
+      "type": "object",
+      "properties": {
+        "schoolId": { "type": "string" },
+        "session": { "type": "string" },
+        "term": { "type": "string" },
+        "studentCount": { "type": "number" },
+        "amount": { "type": "number" },
+        "status": { "type": "string" },
+        "paymentReference": { "type": "string" },
+        "datePaid": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "schools": { "schema": "schools", "description": "Collection of schools" },
+    "users": { "schema": "users", "description": "Collection of users" },
+    "students": { "schema": "students", "description": "Collection of students" },
+    "classes": { "schema": "classes", "description": "Collection of classes" },
+    "subjects": { "schema": "subjects", "description": "Collection of subjects" },
+    "results": { "schema": "results", "description": "Collection of results" },
+    "subscriptions": { "schema": "subscriptions", "description": "Collection of subscriptions" }
+  }
+}
